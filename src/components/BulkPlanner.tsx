@@ -113,9 +113,9 @@ export const BulkPlanner: React.FC = () => {
               onChange={(e) => setExperienceLevel(e.target.value as any)}
               className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
-              <option value="beginner">🌱 Principiante (<1 año entrenando)</option>
-              <option value="intermediate">💪 Intermedio (1-4 años entrenando)</option>
-              <option value="advanced">🏆 Avanzado (+4 años entrenando)</option>
+              <option value="beginner">🌱 Principiante (menos de 1 año)</option>
+              <option value="intermediate">💪 Intermedio (1-4 años)</option>
+              <option value="advanced">🏆 Avanzado (más de 4 años)</option>
             </select>
             <p className="text-slate-400 text-xs mt-2">
               Ganancia recomendada: <strong>{currentRange.label}</strong>
@@ -343,7 +343,7 @@ export const BulkPlanner: React.FC = () => {
           <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
             <div>
               <div className="text-white font-medium">🌱 Principiante</div>
-              <div className="text-slate-400 text-sm">Menos de 1 año entrenando</div>
+              <div className="text-slate-400 text-sm">Menos de 1 año</div>
             </div>
             <div className="text-right">
               <div className="text-green-400 font-bold">0.25-0.5 kg/semana</div>
@@ -354,7 +354,7 @@ export const BulkPlanner: React.FC = () => {
           <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
             <div>
               <div className="text-white font-medium">💪 Intermedio</div>
-              <div className="text-slate-400 text-sm">1-4 años de entrenamiento</div>
+              <div className="text-slate-400 text-sm">1-4 años</div>
             </div>
             <div className="text-right">
               <div className="text-blue-400 font-bold">0.15-0.35 kg/semana</div>
@@ -365,7 +365,7 @@ export const BulkPlanner: React.FC = () => {
           <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
             <div>
               <div className="text-white font-medium">🏆 Avanzado</div>
-              <div className="text-slate-400 text-sm">+4 años de entrenamiento</div>
+              <div className="text-slate-400 text-sm">Más de 4 años</div>
             </div>
             <div className="text-right">
               <div className="text-purple-400 font-bold">0.1-0.25 kg/semana</div>
