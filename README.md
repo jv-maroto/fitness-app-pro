@@ -1,151 +1,173 @@
-# 🎯 Weight Tracker Pro
+# Fitness App Pro
 
-Sistema inteligente y moderno de seguimiento de peso con análisis avanzado, medias móviles, detección de cheat meals y retenciones.
+Sistema completo de seguimiento de peso corporal y nutricion con analisis avanzado basado en evidencia cientifica.
 
-## 🚀 Características
+![Dashboard](screenshots/dashboard.png)
 
-### Core Features
-- ✅ Registro diario de peso
-- 📊 Gráficas interactivas con Recharts
-- 📈 Medias móviles (7, 14 y 30 días)
-- 🍕 Marcadores de cheat meals
-- 💧 Identificación de retenciones de líquidos
-- 🎯 Definición de objetivos (Volumen/Definición/Mantenimiento)
-- 📉 Proyecciones inteligentes de peso
+## Caracteristicas Principales
 
-### Análisis Avanzado
-- **Estadísticas Inteligentes**: Cambio semanal, mensual, consistencia
-- **Insights Automáticos**: Recomendaciones basadas en tus datos
-- **Filtrado Inteligente**: Excluye cheat meals y retenciones de las medias
-- **Análisis Semanal**: Desglose por semanas con métricas detalladas
-- **Proyecciones**: Estimación de peso futuro y días hasta objetivo
+### Dashboard
+Panel principal con metricas en tiempo real:
+- **Peso actual** y medias moviles (7, 14, 30 dias)
+- **Objetivo de peso** con porcentaje de progreso
+- **Consistencia** de registros diarios
+- **Cambio semanal** calculado automaticamente
+- **Proyecciones** de peso estimado y dias hasta objetivo
+- **Analisis inteligente** con recomendaciones personalizadas
 
-### Tecnologías Modernas
-- ⚛️ **React 18** con TypeScript
-- 🎨 **Tailwind CSS** para diseño moderno
-- 📊 **Recharts** para visualizaciones
-- 🗄️ **Zustand** para gestión de estado
-- 💾 **LocalStorage** persistencia automática
-- 🎭 **Framer Motion** animaciones fluidas
-- 📅 **date-fns** manejo de fechas
+![Dashboard](screenshots/dashboard.png)
 
-## 📦 Instalación
+### Graficas de Evolucion
+![Graficas](screenshots/graficas.png)
+
+Visualizacion interactiva del progreso:
+- Medias moviles suavizadas (MA7, MA14, MA30)
+- Toggle para activar/desactivar cada media
+- Marcadores para cheat meals y retenciones de liquidos
+- Las medias excluyen automaticamente dias marcados como cheat meal o retencion para mostrar el progreso real
+
+### Historial de Registros
+![Historial](screenshots/historial.png)
+
+- Lista completa de todos los registros ordenados por fecha
+- Edicion y eliminacion de entradas individuales
+- Notas personalizadas por cada registro
+- Indicadores visuales para dias con cheat meal o retencion
+
+### Planificador de Volumen
+![Planificador](screenshots/planificador.png)
+
+Rangos cientificos basados en Garthe et al. y Helms (2011-2014):
+
+| Nivel | Ganancia Semanal | Ganancia Mensual |
+|-------|------------------|------------------|
+| Principiante | 0.25-0.5 kg | 1-2 kg |
+| Intermedio | 0.15-0.35 kg | 0.6-1.4 kg |
+| Avanzado | 0.1-0.25 kg | 0.4-1 kg |
+
+- Seleccion de nivel de experiencia
+- Duracion del volumen configurable (3-12 meses)
+- Proyecciones conservador/optimo/agresivo
+- Seguimiento de tiempo transcurrido, peso ganado y ritmo actual
+
+### Nutricion
+![Nutricion](screenshots/nutricion.png)
+
+Sistema completo de tracking de comidas:
+- **Registro por comidas**: Desayuno, Almuerzo, Cena, Snacks
+- **Base de datos** con productos reales e imagenes de Open Food Facts
+- **Selector de cantidad** en gramos con calculo automatico de macros
+- **Grafico circular** de progreso diario (calorias, proteinas, carbohidratos, grasas)
+- **Calendario semanal** para navegar entre dias
+- Imagenes de productos de Hacendado/Mercadona
+
+### Evaluacion Nutricional
+![Evaluacion](screenshots/evaluacion.png)
+
+Calculo profesional del metabolismo:
+- **BMR** (Metabolismo Basal) con formula Mifflin-St Jeor
+- **TDEE** (Gasto Total Diario) ajustado por actividad
+- **Desglose detallado**: BMR + NEAT + Pesas + Cardio
+- **Composicion corporal**: porcentaje de grasa, masa magra, masa grasa
+- **Historial de fases** con tracking de rebotes
+
+### Importar/Exportar Datos
+![Datos](screenshots/datos.png)
+
+Gestion completa de datos:
+- **Exportar CSV**: Compatible con Excel para registros de peso
+- **Backup JSON**: Perfil completo + registros + evaluacion nutricional
+- **Importar**: CSV o JSON con deteccion automatica de duplicados
+- **Plantilla CSV** descargable con formato correcto
+
+### Ajustes
+![Ajustes](screenshots/ajustes.png)
+
+Personalizacion completa:
+- Tema claro/oscuro
+- Objetivo de peso (volumen/definicion)
+- Objetivos de nutricion personalizados (calorias, proteinas, carbohidratos, grasas)
+- Configuracion de nombres de comidas
+
+## Stack Tecnologico
+
+| Tecnologia | Uso |
+|------------|-----|
+| React 18 | Framework UI |
+| TypeScript | Tipado estatico |
+| Vite | Build tool y dev server |
+| Zustand | State management |
+| Recharts | Graficas interactivas |
+| Tailwind CSS | Estilos utility-first |
+| Framer Motion | Animaciones |
+| date-fns | Manejo de fechas |
+
+## Instalacion
 
 ```bash
-cd weight-tracker
+# Clonar repositorio
+git clone https://github.com/tu-usuario/fitness-app-pro.git
+
+# Entrar al directorio
+cd fitness-app-pro
+
+# Instalar dependencias
 npm install
+
+# Iniciar servidor de desarrollo
 npm run dev
 ```
 
-La aplicación se abrirá en `http://localhost:3000`
+La aplicacion estara disponible en `http://localhost:5173`
 
-## 🏗️ Estructura del Proyecto
-
-```
-weight-tracker/
-├── src/
-│   ├── components/
-│   │   ├── Dashboard.tsx          # Panel principal con stats
-│   │   ├── WeightChart.tsx        # Gráfica interactiva
-│   │   ├── WeightEntryForm.tsx    # Formulario de registro
-│   │   ├── WeightList.tsx         # Lista de registros
-│   │   └── ProfileSetup.tsx       # Configuración inicial
-│   ├── store/
-│   │   └── useWeightStore.ts      # Estado global con Zustand
-│   ├── utils/
-│   │   ├── statistics.ts          # Cálculos y análisis
-│   │   └── uuid.ts               # Generador de IDs
-│   ├── types/
-│   │   └── index.ts              # Tipos TypeScript
-│   ├── App.tsx                    # Componente principal
-│   ├── main.tsx                   # Entry point
-│   └── index.css                  # Estilos globales
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-└── tailwind.config.js
-```
-
-## 🎯 Uso
-
-### Primera Vez
-1. Ingresa tu nombre y datos básicos
-2. Selecciona tu objetivo (Volumen/Definición/Mantenimiento)
-3. Define tu peso inicial y objetivo
-4. ¡Comienza a registrar!
-
-### Registro Diario
-1. Haz clic en el botón flotante "+"
-2. Ingresa tu peso del día
-3. Marca si es cheat meal o retención (opcional)
-4. Añade notas si lo deseas
-
-### Interpretación de Datos
-- **Peso Actual**: Último registro
-- **Media Móvil 7**: Promedio de última semana (excluye cheat meals)
-- **Cambio Semanal**: Tendencia de ganancia/pérdida por semana
-- **Consistencia**: % de días que has registrado peso
-- **Proyecciones**: Estimación basada en tu tendencia actual
-
-## 🧠 Algoritmos Inteligentes
-
-### Medias Móviles
-Las medias móviles **excluyen automáticamente** registros marcados como cheat meals o retenciones para dar una visión más precisa de tu progreso real.
-
-### Insights Automáticos
-El sistema analiza tus datos y proporciona recomendaciones:
-- Si ganas/pierdes muy rápido o muy lento
-- Si tienes muchos cheat meals
-- Tendencias a corto vs largo plazo
-- Estimación de tiempo para alcanzar objetivo
-
-### Proyecciones
-Basadas en tu cambio semanal promedio:
-- Peso estimado en 30 días
-- Días restantes hasta objetivo (si lo definiste)
-
-## 🎨 Personalización
-
-### Colores y Tema
-Edita `tailwind.config.js` para cambiar la paleta de colores.
-
-### Ventanas de Medias Móviles
-En `WeightChart.tsx` puedes activar/desactivar MA7, MA14, MA30.
-
-## 📱 Responsive
-
-Totalmente responsive y optimizado para:
-- 📱 Móviles
-- 📲 Tablets
-- 💻 Desktop
-
-## 🔒 Privacidad
-
-- Todos los datos se guardan **localmente** en tu navegador
-- No hay backend ni servidor
-- Tus datos **nunca** salen de tu dispositivo
-- Puedes exportar/eliminar tus datos en cualquier momento
-
-## 🚀 Build para Producción
+## Build para Produccion
 
 ```bash
 npm run build
 ```
 
-Los archivos optimizados estarán en `dist/`. Puedes desplegarlos en cualquier hosting estático (Netlify, Vercel, GitHub Pages, etc.).
+Los archivos optimizados se generan en el directorio `dist/`.
 
-## 🤝 Contribuir
+## Estructura del Proyecto
 
-Este es un proyecto open source. Siéntete libre de:
-- Reportar bugs
-- Sugerir features
-- Hacer pull requests
-- Mejorar la documentación
+```
+fitness-app-pro/
+├── public/
+│   └── food-images/          # Imagenes de productos
+├── src/
+│   ├── components/
+│   │   ├── Dashboard.tsx     # Panel principal
+│   │   ├── WeightChart.tsx   # Graficas
+│   │   ├── WeightList.tsx    # Historial
+│   │   ├── BulkPlanner.tsx   # Planificador
+│   │   ├── NutritionLog.tsx  # Nutricion
+│   │   ├── NutritionEvaluation.tsx
+│   │   ├── ImportExport.tsx  # Datos
+│   │   └── AddFoodModal.tsx  # Modal alimentos
+│   ├── data/
+│   │   └── foodDatabase.ts   # Base de datos alimentos
+│   ├── store/
+│   │   ├── useWeightStore.ts
+│   │   ├── useNutritionStore.ts
+│   │   └── useThemeStore.ts
+│   ├── types/
+│   │   └── index.ts          # Tipos TypeScript
+│   └── utils/
+│       ├── statistics.ts     # Calculos
+│       └── nutrition.ts      # Utilidades nutricion
+├── package.json
+├── vite.config.ts
+├── tailwind.config.js
+└── tsconfig.json
+```
 
-## 📄 Licencia
+## Privacidad
 
-MIT License - Libre para uso personal y comercial
+- Todos los datos se almacenan localmente en el navegador (LocalStorage)
+- No hay backend ni servidor externo
+- Los datos nunca salen del dispositivo
+- Exporta tus datos en cualquier momento
 
----
+## Licencia
 
-**Desarrollado con ❤️ usando las mejores prácticas y tecnologías modernas de 2025**
+MIT License
