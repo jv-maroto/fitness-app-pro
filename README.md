@@ -2,7 +2,7 @@
 
 Sistema completo de seguimiento de peso corporal y nutricion con analisis avanzado basado en evidencia cientifica.
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screeshot/cp1.png)
 
 ## Caracteristicas Principales
 
@@ -15,10 +15,8 @@ Panel principal con metricas en tiempo real:
 - **Proyecciones** de peso estimado y dias hasta objetivo
 - **Analisis inteligente** con recomendaciones personalizadas
 
-![Dashboard](screenshots/dashboard.png)
-
 ### Graficas de Evolucion
-![Graficas](screenshots/graficas.png)
+![Graficas](screeshot/c2.png)
 
 Visualizacion interactiva del progreso:
 - Medias moviles suavizadas (MA7, MA14, MA30)
@@ -27,7 +25,7 @@ Visualizacion interactiva del progreso:
 - Las medias excluyen automaticamente dias marcados como cheat meal o retencion para mostrar el progreso real
 
 ### Historial de Registros
-![Historial](screenshots/historial.png)
+![Historial](screeshot/c3.png)
 
 - Lista completa de todos los registros ordenados por fecha
 - Edicion y eliminacion de entradas individuales
@@ -35,7 +33,7 @@ Visualizacion interactiva del progreso:
 - Indicadores visuales para dias con cheat meal o retencion
 
 ### Planificador de Volumen
-![Planificador](screenshots/planificador.png)
+![Planificador](screeshot/c4.png)
 
 Rangos cientificos basados en Garthe et al. y Helms (2011-2014):
 
@@ -51,7 +49,7 @@ Rangos cientificos basados en Garthe et al. y Helms (2011-2014):
 - Seguimiento de tiempo transcurrido, peso ganado y ritmo actual
 
 ### Nutricion
-![Nutricion](screenshots/nutricion.png)
+![Nutricion](screeshot/c7.png)
 
 Sistema completo de tracking de comidas:
 - **Registro por comidas**: Desayuno, Almuerzo, Cena, Snacks
@@ -62,7 +60,7 @@ Sistema completo de tracking de comidas:
 - Imagenes de productos de Hacendado/Mercadona
 
 ### Evaluacion Nutricional
-![Evaluacion](screenshots/evaluacion.png)
+![Evaluacion](screeshot/c8.png)
 
 Calculo profesional del metabolismo:
 - **BMR** (Metabolismo Basal) con formula Mifflin-St Jeor
@@ -72,7 +70,7 @@ Calculo profesional del metabolismo:
 - **Historial de fases** con tracking de rebotes
 
 ### Importar/Exportar Datos
-![Datos](screenshots/datos.png)
+![Datos](screeshot/c9.png)
 
 Gestion completa de datos:
 - **Exportar CSV**: Compatible con Excel para registros de peso
@@ -81,7 +79,7 @@ Gestion completa de datos:
 - **Plantilla CSV** descargable con formato correcto
 
 ### Ajustes
-![Ajustes](screenshots/ajustes.png)
+![Ajustes](screeshot/c3.png)
 
 Personalizacion completa:
 - Tema claro/oscuro
