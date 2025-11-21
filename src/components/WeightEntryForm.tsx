@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useWeightStore } from '../store/useWeightStore';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Pizza, Droplets } from 'lucide-react';
 import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -115,8 +115,8 @@ export const WeightEntryForm: React.FC = () => {
                         }}
                         className="w-5 h-5 rounded border-slate-600 text-blue-600 focus:ring-blue-500 focus:ring-offset-slate-800"
                       />
-                      <span className="text-slate-300 group-hover:text-white transition-colors">
-                        🍕 Cheat Meal (día de exceso calórico)
+                      <span className="text-slate-300 group-hover:text-white transition-colors flex items-center gap-2">
+                        <Pizza className="w-4 h-4 text-orange-400" /> Cheat Meal (día de exceso calórico)
                       </span>
                     </label>
 
@@ -130,8 +130,8 @@ export const WeightEntryForm: React.FC = () => {
                         }}
                         className="w-5 h-5 rounded border-slate-600 text-blue-600 focus:ring-blue-500 focus:ring-offset-slate-800"
                       />
-                      <span className="text-slate-300 group-hover:text-white transition-colors">
-                        💧 Retención de líquidos
+                      <span className="text-slate-300 group-hover:text-white transition-colors flex items-center gap-2">
+                        <Droplets className="w-4 h-4 text-blue-400" /> Retención de líquidos
                       </span>
                     </label>
                   </div>
