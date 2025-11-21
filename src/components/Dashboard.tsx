@@ -1,11 +1,13 @@
 import React, { useMemo } from 'react';
 import { useWeightStore } from '../store/useWeightStore';
+import { useThemeStore } from '../store/useThemeStore';
 import { calculateStatistics, getSmartInsights } from '../utils/statistics';
-import { TrendingUp, TrendingDown, Target, Calendar, Award, Activity } from 'lucide-react';
+import { TrendingUp, TrendingDown, Target, Calendar, Award, Activity, Brain, Pizza, Droplets } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Dashboard: React.FC = () => {
   const { entries, profile } = useWeightStore();
+  const { theme } = useThemeStore();
 
   const statistics = useMemo(() => {
     if (!profile) return null;
@@ -33,19 +35,19 @@ export const Dashboard: React.FC = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay }}
-      className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50 hover:border-slate-600/50 transition-all duration-300 hover:shadow-xl"
+      className="glass-card p-6"
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <div className="flex items-center gap-2 text-slate-400 text-sm mb-2">
+          <div className="flex items-center gap-2 text-theme-secondary text-sm mb-2">
             {icon}
             <span>{title}</span>
           </div>
-          <div className="text-3xl font-bold text-white mb-1">{value}</div>
+          <div className="text-3xl font-bold text-theme-primary mb-1">{value}</div>
           {subtitle && (
-            <div className="text-sm text-slate-400 flex items-center gap-1">
-              {trend === 'up' && <TrendingUp className="w-4 h-4 text-green-400" />}
-              {trend === 'down' && <TrendingDown className="w-4 h-4 text-red-400" />}
+            <div className="text-sm text-theme-muted flex items-center gap-1">
+              {trend === 'up' && <TrendingUp className="w-4 h-4 text-green-500" />}
+              {trend === 'down' && <TrendingDown className="w-4 h-4 text-red-500" />}
               {subtitle}
             </div>
           )}
@@ -134,11 +136,13 @@ export const Dashboard: React.FC = () => {
           className="grid grid-cols-2 gap-4"
         >
           {statistics.cheatMealCount > 0 && (
-            <div className="bg-orange-900/20 border border-orange-500/30 rounded-xl p-4">
-              <div className="text-orange-400 text-sm mb-1">🍕 Cheat Meals</div>
-              <div className="text-2xl font-bold text-white">
+            <div className={`glass-card p-4 ${theme === 'dark' ? 'border-orange-500/30' : 'border-orange-400/50'}`}>
+              <div className={`text-sm mb-1 flex items-center gap-2 ${theme === 'dark' ? 'text-orange-400' : 'text-orange-600'}`}>
+                <Pizza className="w-4 h-4" /> Cheat Meals
+              </div>
+              <div className="text-2xl font-bold text-theme-primary">
                 {statistics.cheatMealCount}
-                <span className="text-sm text-slate-400 ml-2">
+                <span className="text-sm text-theme-muted ml-2">
                   ({((statistics.cheatMealCount / statistics.totalEntries) * 100).toFixed(0)}%)
                 </span>
               </div>
@@ -146,11 +150,13 @@ export const Dashboard: React.FC = () => {
           )}
 
           {statistics.retentionCount > 0 && (
-            <div className="bg-blue-900/20 border border-blue-500/30 rounded-xl p-4">
-              <div className="text-blue-400 text-sm mb-1">💧 Retenciones</div>
-              <div className="text-2xl font-bold text-white">
+            <div className={`glass-card p-4 ${theme === 'dark' ? 'border-blue-500/30' : 'border-blue-400/50'}`}>
+              <div className={`text-sm mb-1 flex items-center gap-2 ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>
+                <Droplets className="w-4 h-4" /> Retenciones
+              </div>
+              <div className="text-2xl font-bold text-theme-primary">
                 {statistics.retentionCount}
-                <span className="text-sm text-slate-400 ml-2">
+                <span className="text-sm text-theme-muted ml-2">
                   ({((statistics.retentionCount / statistics.totalEntries) * 100).toFixed(0)}%)
                 </span>
               </div>
@@ -165,25 +171,29 @@ export const Dashboard: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 border border-purple-500/30 rounded-2xl p-6"
+          className={`glass-card p-6 ${
+            theme === 'dark'
+              ? 'bg-gradient-to-br from-purple-900/20 to-blue-900/20'
+              : 'bg-gradient-to-br from-purple-100/50 to-blue-100/50'
+          }`}
         >
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <Target className="w-5 h-5 text-purple-400" />
+          <h3 className="text-lg font-semibold text-theme-primary mb-4 flex items-center gap-2">
+            <Target className={`w-5 h-5 ${theme === 'dark' ? 'text-purple-400' : 'text-purple-600'}`} />
             Proyecciones
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <div className="text-slate-400 text-sm mb-1">Peso estimado en 30 días</div>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-theme-secondary text-sm mb-1">Peso estimado en 30 días</div>
+              <div className="text-2xl font-bold text-theme-primary">
                 {statistics.projectedWeight30Days.toFixed(1)} kg
               </div>
             </div>
             {statistics.estimatedDaysToGoal && (
               <div>
-                <div className="text-slate-400 text-sm mb-1">Días estimados hasta objetivo</div>
-                <div className="text-2xl font-bold text-white">
+                <div className="text-theme-secondary text-sm mb-1">Días estimados hasta objetivo</div>
+                <div className="text-2xl font-bold text-theme-primary">
                   {Math.round(statistics.estimatedDaysToGoal)} días
-                  <span className="text-sm text-slate-400 ml-2">
+                  <span className="text-sm text-theme-muted ml-2">
                     (~{Math.round(statistics.estimatedDaysToGoal / 7)} semanas)
                   </span>
                 </div>
@@ -199,10 +209,11 @@ export const Dashboard: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9 }}
-          className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50"
+          className="glass-card p-6"
         >
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            🧠 Análisis Inteligente
+          <h3 className="text-lg font-semibold text-theme-primary mb-4 flex items-center gap-2">
+            <Brain className={`w-5 h-5 ${theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600'}`} />
+            Análisis Inteligente
           </h3>
           <div className="space-y-3">
             {insights.map((insight, index) => (
@@ -211,9 +222,13 @@ export const Dashboard: React.FC = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.9 + index * 0.1 }}
-                className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30"
+                className={`rounded-xl p-3 ${
+                  theme === 'dark'
+                    ? 'bg-slate-800/50 border border-slate-700/50'
+                    : 'bg-slate-100/50 border border-slate-200/50'
+                }`}
               >
-                <p className="text-slate-200 text-sm">{insight}</p>
+                <p className="text-theme-secondary text-sm">{insight}</p>
               </motion.div>
             ))}
           </div>

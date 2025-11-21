@@ -1,9 +1,10 @@
-import { WeightEntry, UserProfile } from '../types';
+import { WeightEntry, UserProfile, NutritionEvaluation } from '../types';
 import { format, parse } from 'date-fns';
 
 export interface CSVExportData {
   profile: UserProfile;
   entries: WeightEntry[];
+  nutrition?: NutritionEvaluation | null;
 }
 
 /**
@@ -53,12 +54,13 @@ export function downloadCSV(csvContent: string, filename: string = 'weight-track
 }
 
 /**
- * Exporta datos completos (perfil + entradas) en formato JSON
+ * Exporta datos completos (perfil + entradas + nutrición) en formato JSON
  */
-export function exportToJSON(profile: UserProfile, entries: WeightEntry[]): string {
+export function exportToJSON(profile: UserProfile, entries: WeightEntry[], nutrition?: NutritionEvaluation | null): string {
   const data: CSVExportData = {
     profile,
     entries: entries.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
+    nutrition,
   };
 
   return JSON.stringify(data, null, 2);

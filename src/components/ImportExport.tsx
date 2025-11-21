@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useWeightStore } from '../store/useWeightStore';
+import { useThemeStore } from '../store/useThemeStore';
+import { useNutritionStore } from '../store/useNutritionStore';
 import {
   exportToCSV,
   exportToJSON,
@@ -10,14 +12,15 @@ import {
   readFileAsText,
 } from '../utils/csv';
 import { v4 as uuidv4 } from '../utils/uuid';
-import { Download, Upload, FileJson, FileSpreadsheet, AlertCircle, CheckCircle, X } from 'lucide-react';
+import { Download, Upload, FileJson, FileSpreadsheet, AlertCircle, CheckCircle, X, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
 import { RecalculateStats } from './RecalculateStats';
 
 export const ImportExport: React.FC = () => {
   const { entries, profile, addEntry, importEntries, createProfile, updateProfile } = useWeightStore();
-  const [showModal, setShowModal] = useState(false);
+  const { theme } = useThemeStore();
+  const { evaluation: nutritionEvaluation } = useNutritionStore();
   const [importStatus, setImportStatus] = useState<{
     type: 'success' | 'error' | null;
     message: string;
@@ -32,7 +35,7 @@ export const ImportExport: React.FC = () => {
 
     setImportStatus({
       type: 'success',
-      message: `✅ Exportados ${entries.length} registros a CSV`,
+      message: `Exportados ${entries.length} registros a CSV`,
     });
     setTimeout(() => setImportStatus({ type: null, message: '' }), 3000);
   };
@@ -40,13 +43,14 @@ export const ImportExport: React.FC = () => {
   const handleExportJSON = () => {
     if (!profile) return;
 
-    const json = exportToJSON(profile, entries);
-    const filename = `weight-tracker-backup-${format(new Date(), 'yyyy-MM-dd')}.json`;
+    const json = exportToJSON(profile, entries, nutritionEvaluation);
+    const filename = `fitness-app-backup-${format(new Date(), 'yyyy-MM-dd')}.json`;
     downloadJSON(json, filename);
 
+    const hasNutrition = nutritionEvaluation ? ' + nutrición' : '';
     setImportStatus({
       type: 'success',
-      message: '✅ Backup completo creado (perfil + datos)',
+      message: `Backup completo creado (perfil + datos${hasNutrition})`,
     });
     setTimeout(() => setImportStatus({ type: null, message: '' }), 3000);
   };
@@ -67,14 +71,13 @@ export const ImportExport: React.FC = () => {
         throw new Error('Formato de archivo no soportado. Usa .csv o .json');
       }
 
-      // Reset input
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
     } catch (error: any) {
       setImportStatus({
         type: 'error',
-        message: `❌ Error: ${error.message}`,
+        message: `Error: ${error.message}`,
       });
       setTimeout(() => setImportStatus({ type: null, message: '' }), 5000);
     }
@@ -87,7 +90,6 @@ export const ImportExport: React.FC = () => {
       throw new Error('No se encontraron registros válidos en el CSV');
     }
 
-    // Convertir a WeightEntry completo
     const newEntries = parsedEntries.map(entry => ({
       id: uuidv4(),
       date: entry.date!,
@@ -99,7 +101,6 @@ export const ImportExport: React.FC = () => {
       updatedAt: new Date(),
     }));
 
-    // Opción: Merge o Replace
     const shouldReplace = confirm(
       `Se importarán ${newEntries.length} registros.\n\n` +
       `¿Deseas REEMPLAZAR todos tus datos actuales (${entries.length} registros)?\n\n` +
@@ -110,7 +111,6 @@ export const ImportExport: React.FC = () => {
     if (shouldReplace) {
       importEntries(newEntries);
 
-      // Actualizar peso actual del perfil con el último registro válido
       const validEntries = newEntries.filter(e => !e.isCheatMeal && !e.isRetention);
       if (validEntries.length > 0 && profile) {
         updateProfile({
@@ -120,10 +120,9 @@ export const ImportExport: React.FC = () => {
 
       setImportStatus({
         type: 'success',
-        message: `✅ ${newEntries.length} registros importados (reemplazados). Recalcula estadísticas abajo.`,
+        message: `${newEntries.length} registros importados (reemplazados). Recalcula estadísticas abajo.`,
       });
     } else {
-      // Merge sin duplicados (por fecha)
       const existingDates = new Set(
         entries.map(e => format(new Date(e.date), 'yyyy-MM-dd'))
       );
@@ -135,7 +134,7 @@ export const ImportExport: React.FC = () => {
       if (uniqueNewEntries.length === 0) {
         setImportStatus({
           type: 'error',
-          message: '⚠️ No hay registros nuevos para importar (fechas duplicadas)',
+          message: 'No hay registros nuevos para importar (fechas duplicadas)',
         });
         return;
       }
@@ -144,7 +143,7 @@ export const ImportExport: React.FC = () => {
 
       setImportStatus({
         type: 'success',
-        message: `✅ ${uniqueNewEntries.length} registros nuevos añadidos. Recalcula estadísticas abajo.`,
+        message: `${uniqueNewEntries.length} registros nuevos añadidos. Recalcula estadísticas abajo.`,
       });
     }
 
@@ -165,7 +164,6 @@ export const ImportExport: React.FC = () => {
       return;
     }
 
-    // Restaurar perfil y entradas
     createProfile({
       name: data.profile.name,
       goalType: data.profile.goalType,
@@ -181,7 +179,7 @@ export const ImportExport: React.FC = () => {
 
     setImportStatus({
       type: 'success',
-      message: `✅ Backup restaurado: ${data.entries.length} registros + perfil. Las estadísticas se recalculan automáticamente.`,
+      message: `Backup restaurado: ${data.entries.length} registros + perfil.`,
     });
 
     setTimeout(() => setImportStatus({ type: null, message: '' }), 7000);
@@ -198,7 +196,7 @@ export const ImportExport: React.FC = () => {
 
     setImportStatus({
       type: 'success',
-      message: '✅ Plantilla CSV descargada',
+      message: 'Plantilla CSV descargada',
     });
     setTimeout(() => setImportStatus({ type: null, message: '' }), 3000);
   };
@@ -207,9 +205,13 @@ export const ImportExport: React.FC = () => {
     <>
       <div className="space-y-4">
         {/* Export Section */}
-        <div className="bg-gradient-to-br from-blue-900/30 to-blue-800/30 border border-blue-500/30 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <Download className="w-5 h-5 text-blue-400" />
+        <div className={`glass-card p-6 ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-blue-900/20 to-blue-800/20'
+            : 'bg-gradient-to-br from-blue-100/50 to-blue-50/50'
+        }`}>
+          <h3 className="text-lg font-semibold text-theme-primary mb-4 flex items-center gap-2">
+            <Download className={`w-5 h-5 ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`} />
             Exportar Datos
           </h3>
 
@@ -217,7 +219,13 @@ export const ImportExport: React.FC = () => {
             <button
               onClick={handleExportCSV}
               disabled={entries.length === 0}
-              className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-all"
+              className={`flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-xl transition-all ${
+                entries.length === 0
+                  ? 'bg-slate-500/30 text-slate-500 cursor-not-allowed'
+                  : theme === 'dark'
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                    : 'bg-blue-500 hover:bg-blue-600 text-white'
+              }`}
             >
               <FileSpreadsheet className="w-5 h-5" />
               Exportar CSV
@@ -227,7 +235,13 @@ export const ImportExport: React.FC = () => {
             <button
               onClick={handleExportJSON}
               disabled={!profile || entries.length === 0}
-              className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-all"
+              className={`flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-xl transition-all ${
+                !profile || entries.length === 0
+                  ? 'bg-slate-500/30 text-slate-500 cursor-not-allowed'
+                  : theme === 'dark'
+                    ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                    : 'bg-purple-500 hover:bg-purple-600 text-white'
+              }`}
             >
               <FileJson className="w-5 h-5" />
               Backup JSON
@@ -235,16 +249,20 @@ export const ImportExport: React.FC = () => {
             </button>
           </div>
 
-          <p className="text-slate-400 text-sm mt-3">
+          <p className="text-theme-muted text-sm mt-3">
             <strong>CSV:</strong> Solo registros de peso (compatible con Excel)<br />
-            <strong>JSON:</strong> Backup completo (perfil + registros)
+            <strong>JSON:</strong> Backup completo (perfil + registros + evaluación nutricional)
           </p>
         </div>
 
         {/* Import Section */}
-        <div className="bg-gradient-to-br from-green-900/30 to-green-800/30 border border-green-500/30 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <Upload className="w-5 h-5 text-green-400" />
+        <div className={`glass-card p-6 ${
+          theme === 'dark'
+            ? 'bg-gradient-to-br from-green-900/20 to-green-800/20'
+            : 'bg-gradient-to-br from-green-100/50 to-green-50/50'
+        }`}>
+          <h3 className="text-lg font-semibold text-theme-primary mb-4 flex items-center gap-2">
+            <Upload className={`w-5 h-5 ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`} />
             Importar Datos
           </h3>
 
@@ -260,7 +278,11 @@ export const ImportExport: React.FC = () => {
 
             <label
               htmlFor="file-import"
-              className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-all cursor-pointer"
+              className={`flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-xl transition-all cursor-pointer ${
+                theme === 'dark'
+                  ? 'bg-green-600 hover:bg-green-700 text-white'
+                  : 'bg-green-500 hover:bg-green-600 text-white'
+              }`}
             >
               <Upload className="w-5 h-5" />
               Seleccionar Archivo CSV o JSON
@@ -268,16 +290,24 @@ export const ImportExport: React.FC = () => {
 
             <button
               onClick={downloadTemplate}
-              className="w-full flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-medium py-2 px-4 rounded-lg transition-all text-sm"
+              className={`w-full flex items-center justify-center gap-2 font-medium py-2 px-4 rounded-xl transition-all text-sm ${
+                theme === 'dark'
+                  ? 'bg-slate-700/50 hover:bg-slate-700 text-slate-300'
+                  : 'bg-slate-200/50 hover:bg-slate-200 text-slate-700'
+              }`}
             >
               <Download className="w-4 h-4" />
               Descargar Plantilla CSV
             </button>
           </div>
 
-          <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-3 mt-4">
-            <p className="text-yellow-400 text-sm">
-              ⚠️ <strong>Importante:</strong><br />
+          <div className={`rounded-xl p-3 mt-4 ${
+            theme === 'dark'
+              ? 'bg-yellow-900/20 border border-yellow-500/30'
+              : 'bg-yellow-100/50 border border-yellow-400/50'
+          }`}>
+            <p className={`text-sm ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-700'}`}>
+              <strong>Importante:</strong><br />
               • CSV: Se pueden añadir o reemplazar registros<br />
               • JSON: Reemplaza TODO (perfil + datos)<br />
               • Se detectarán y omitirán fechas duplicadas
@@ -286,14 +316,18 @@ export const ImportExport: React.FC = () => {
         </div>
 
         {/* Formato CSV Info */}
-        <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
-          <h4 className="text-white font-semibold mb-3">📋 Formato CSV Esperado</h4>
-          <div className="bg-slate-900/50 rounded-lg p-3 font-mono text-xs text-slate-300 overflow-x-auto">
+        <div className="glass-card p-6">
+          <h4 className="text-theme-primary font-semibold mb-3 flex items-center gap-2">
+            <Info className="w-4 h-4" /> Formato CSV Esperado
+          </h4>
+          <div className={`rounded-xl p-3 font-mono text-xs overflow-x-auto ${
+            theme === 'dark' ? 'bg-slate-900/50 text-slate-300' : 'bg-slate-100 text-slate-700'
+          }`}>
             <div>Fecha,Peso (kg),Cheat Meal,Retención,Notas</div>
-            <div className="text-slate-500">2025-01-01,75.5,No,No,Primer día</div>
-            <div className="text-slate-500">2025-01-02,75.3,Sí,No,Cheat meal</div>
+            <div className="text-theme-muted">2025-01-01,75.5,No,No,Primer día</div>
+            <div className="text-theme-muted">2025-01-02,75.3,Sí,No,Cheat meal</div>
           </div>
-          <p className="text-slate-400 text-sm mt-2">
+          <p className="text-theme-muted text-sm mt-2">
             • Fecha: yyyy-MM-dd o dd/MM/yyyy<br />
             • Peso: número con punto o coma<br />
             • Cheat/Retención: Sí/No, Yes/No, 1/0<br />
@@ -315,11 +349,15 @@ export const ImportExport: React.FC = () => {
             className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
           >
             <div
-              className={`flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border ${
+              className={`flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border backdrop-blur-xl ${
                 importStatus.type === 'success'
-                  ? 'bg-green-900/90 border-green-500/50 text-green-100'
-                  : 'bg-red-900/90 border-red-500/50 text-red-100'
-              } backdrop-blur-xl`}
+                  ? theme === 'dark'
+                    ? 'bg-green-900/90 border-green-500/50 text-green-100'
+                    : 'bg-green-100 border-green-400 text-green-800'
+                  : theme === 'dark'
+                    ? 'bg-red-900/90 border-red-500/50 text-red-100'
+                    : 'bg-red-100 border-red-400 text-red-800'
+              }`}
             >
               {importStatus.type === 'success' ? (
                 <CheckCircle className="w-5 h-5" />
