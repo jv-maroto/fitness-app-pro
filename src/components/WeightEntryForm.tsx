@@ -59,12 +59,12 @@ export const WeightEntryForm: React.FC = () => {
             />
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md z-50 p-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4"
             >
-              <div className="bg-slate-800 rounded-2xl shadow-2xl border border-slate-700">
+              <div className="bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 w-full max-w-md max-h-[90vh] overflow-y-auto">
                 <div className="flex justify-between items-center p-6 border-b border-slate-700">
                   <h2 className="text-xl font-bold text-white">📝 Nuevo Registro de Peso</h2>
                   <button
